@@ -67,7 +67,7 @@ export const Footer = () => {
           duration: 0.5,
           delay: 0.2
         }} className="flex items-center gap-1 text-sm text-muted-foreground">
-            <span>Made with</span>
+            <span>Made By Amina Ali</span>
             <Heart className="w-4 h-4 text-accent fill-accent" />
             <span>© {new Date().getFullYear()}</span>
           </motion.div>

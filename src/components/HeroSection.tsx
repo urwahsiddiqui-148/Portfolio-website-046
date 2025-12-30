@@ -1,12 +1,52 @@
 import { motion } from 'framer-motion';
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, Briefcase, Mail } from 'lucide-react';
 import profileImage from '@/assets/profile-image.png';
 
+const letterVariants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.05,
+      duration: 0.5,
+      ease: [0.4, 0, 0.2, 1] as const
+    }
+  })
+};
+
+const AnimatedText = ({ text, className }: { text: string; className?: string }) => {
+  return (
+    <span className={className}>
+      {text.split('').map((char, i) => (
+        <motion.span
+          key={i}
+          custom={i}
+          variants={letterVariants}
+          initial="hidden"
+          animate="visible"
+          className="inline-block"
+          style={{ whiteSpace: char === ' ' ? 'pre' : 'normal' }}
+        >
+          {char}
+        </motion.span>
+      ))}
+    </span>
+  );
+};
+
 export const HeroSection = () => {
+  const handleScrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-32"
     >
       {/* Animated Background Orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -38,7 +78,7 @@ export const HeroSection = () => {
               <div className="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-primary/30 relative z-10">
                 <img
                   src={profileImage}
-                  alt="Amna - Cloud & Networking Professional"
+                  alt="Amina Ali - Cloud & Networking Professional"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -55,9 +95,19 @@ export const HeroSection = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <span className="inline-block px-4 py-2 rounded-full bg-primary/10 border border-primary/30 text-sm font-medium text-primary mb-6">
+              <motion.span 
+                className="inline-block px-4 py-2 rounded-full bg-primary/10 border border-primary/30 text-sm font-medium text-primary mb-6"
+                animate={{ 
+                  boxShadow: [
+                    '0 0 10px hsl(270 95% 65% / 0.3)',
+                    '0 0 20px hsl(270 95% 65% / 0.5)',
+                    '0 0 10px hsl(270 95% 65% / 0.3)'
+                  ]
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
                 Cloud & Networking Professional
-              </span>
+              </motion.span>
             </motion.div>
 
             <motion.h1
@@ -66,18 +116,25 @@ export const HeroSection = () => {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
             >
-              Hi, I'm{' '}
-              <span className="gradient-text">Amna</span>
+              <span className="block">Hi, I'm</span>
+              <span className="gradient-text text-shimmer">
+                <AnimatedText text="Amina Ali" />
+              </span>
             </motion.h1>
 
             <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="text-lg md:text-xl text-muted-foreground mb-8 leading-relaxed"
+              className="text-lg md:text-xl text-muted-foreground mb-10 leading-relaxed"
             >
-              AWS Certified Cloud Practitioner | Microsoft Student Ambassador | 
-              Bridging traditional networking with cloud technologies
+              <motion.span
+                animate={{ opacity: [0.7, 1, 0.7] }}
+                transition={{ duration: 3, repeat: Infinity }}
+              >
+                AWS Certified Cloud Practitioner | Microsoft Student Ambassador | 
+                Bridging traditional networking with cloud technologies
+              </motion.span>
             </motion.p>
 
             <motion.div
@@ -86,31 +143,40 @@ export const HeroSection = () => {
               transition={{ duration: 0.6, delay: 0.5 }}
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
             >
-              <a href="#contact" className="glow-button text-primary-foreground text-center">
+              <button 
+                onClick={() => handleScrollToSection('contact')} 
+                className="glow-button text-primary-foreground flex items-center justify-center gap-2"
+              >
+                <Mail className="w-5 h-5" />
                 Get In Touch
-              </a>
-              <a href="#projects" className="glow-button-outline text-center">
+              </button>
+              <button 
+                onClick={() => handleScrollToSection('projects')} 
+                className="glow-button-outline flex items-center justify-center gap-2"
+              >
+                <Briefcase className="w-5 h-5" />
                 View My Work
-              </a>
+              </button>
             </motion.div>
           </div>
         </div>
 
-        {/* Scroll Indicator */}
+        {/* Scroll Indicator - Positioned lower and separated */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 0.6 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          transition={{ delay: 1.5, duration: 0.6 }}
+          className="absolute bottom-4 left-1/2 -translate-x-1/2"
         >
-          <motion.div
+          <motion.button
+            onClick={() => handleScrollToSection('about')}
             animate={{ y: [0, 10, 0] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="flex flex-col items-center gap-2 text-muted-foreground"
+            className="flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer"
           >
             <span className="text-sm">Scroll to explore</span>
             <ArrowDown className="w-5 h-5" />
-          </motion.div>
+          </motion.button>
         </motion.div>
       </div>
     </section>

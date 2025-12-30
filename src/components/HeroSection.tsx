@@ -137,10 +137,29 @@ export const HeroSection = () => {
               </motion.span>
             </motion.p>
 
+            {/* Scroll Indicator - Above buttons */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.6 }}
+              className="mb-8"
+            >
+              <motion.button
+                onClick={() => handleScrollToSection('about')}
+                animate={{ y: [0, 10, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                className="flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer mx-auto lg:mx-0"
+              >
+                <span className="text-sm">Scroll to explore</span>
+                <ArrowDown className="w-5 h-5" />
+              </motion.button>
+            </motion.div>
+
+            {/* CTA Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
+              transition={{ duration: 0.6, delay: 0.7 }}
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
             >
               <button 
@@ -160,24 +179,6 @@ export const HeroSection = () => {
             </motion.div>
           </div>
         </div>
-
-        {/* Scroll Indicator - Positioned lower and separated */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 0.6 }}
-          className="absolute bottom-4 left-1/2 -translate-x-1/2"
-        >
-          <motion.button
-            onClick={() => handleScrollToSection('about')}
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer"
-          >
-            <span className="text-sm">Scroll to explore</span>
-            <ArrowDown className="w-5 h-5" />
-          </motion.button>
-        </motion.div>
       </div>
     </section>
   );

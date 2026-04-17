@@ -25,15 +25,24 @@ export const ContactSection = () => {
     setIsSubmitting(true);
     
     try {
-      const { error } = await supabase
-        .from('contacts')
-        .insert({
-          name: formData.name.trim(),
-          email: formData.email.trim(),
-          message: formData.message.trim(),
-        });
+      const name = formData.name.trim();
+      const email = formData.email.trim();
+      const message = formData.message.trim();
 
-      if (error) throw error;
+      const { error: dbError } = await supabase
+        .from('contacts')
+        .insert({ name, email, message });
+
+      if (dbError) throw dbError;
+
+      // Send email notification (non-blocking for the user — log but don't fail UX if email errors)
+      const { error: emailError } = await supabase.functions.invoke('send-contact-email', {
+        body: { name, email, message },
+      });
+
+      if (emailError) {
+        console.error('Email notification failed:', emailError);
+      }
 
       toast({
         title: "Message sent!",
